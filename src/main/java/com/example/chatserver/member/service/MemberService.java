@@ -17,6 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -49,9 +50,8 @@ public class MemberService {
 
     public Member login(MemberLoginReqDto memberLoginReqDto) {
         Member member = memberRepository.findByEmail(memberLoginReqDto.getEmail()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 이메일입니다."));
-        log.info(member.getEmail() + " : " + member.getPassword());
-        // mathches에서 첫번째 인자를 암호화해 두번째 암호화된 인자와 비교한다. true / false
 
+        // mathches에서 첫번째 인자를 암호화해 두번째 암호화된 인자와 비교한다. true / false
         if(!passwordEncoder.matches(memberLoginReqDto.getPassword(), member.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }

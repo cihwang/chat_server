@@ -1,3 +1,4 @@
+/*
 package com.example.chatserver.chat.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
         this.simpleWebSocketHandler = simpleWebSocketHandler;
     }
 
-    /**
+    */
+/**
      * webSocket 소스 코드를 처리할 웹소켓 핸들러를 등록해라
      * @param registry
-     */
+     *//*
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
        // /connect url로 웹소켓 연결 요청이 들어오면 핸들러 클래스가 처리
@@ -31,3 +34,4 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .setAllowedOrigins("http://localhost:5173");
     }
 }
+*/

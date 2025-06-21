@@ -115,6 +115,9 @@ public class ChatService {
         return dtos;
     }
 
+    /**
+     * room id에 대한 채팅방 조회 -> 내가 누군지 조회 -> participant에 '나' 추가
+     */
     public void addParticipantToGroupChat(Long roomId){
         // 채팅방 조회
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("room can not be found"));
@@ -124,11 +127,19 @@ public class ChatService {
 
         // 이미 참여자인지 검증
         Optional<ChatParticipant> participant = chatParticipantRepository.findByChatRoomAndMember(chatRoom, member);
+
         if(!participant.isPresent()){
-            ChatParticipant
+            addParticipantToRoom(chatRoom, member);
         }
+    }
 
-        // chatParticipant 객체 생성 & DB 저장
+    // 채팅방(그룹, 개인)에 참여자 추가
+    public void addParticipantToRoom(ChatRoom chatRoom, Member member) {
+        ChatParticipant chatParticipant = ChatParticipant.builder()
+                .chatRoom(chatRoom)
+                .member(member)
+                .build();
 
+        chatParticipantRepository.save(chatParticipant);
     }
 }

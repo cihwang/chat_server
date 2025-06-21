@@ -33,16 +33,17 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
+    // 그룹채팅 목록 조회
     @GetMapping("/room/group/list")
     public ResponseEntity<?> getGroupChatRooms(){
-        List<ChatRoomListResDto> chatRooms = chatService.getGroupChatRooms(); // group
+        List<ChatRoomListResDto> chatRooms = chatService.getGroupChatRooms();
         return new ResponseEntity<>(chatRooms, HttpStatus.OK);
     }
 
     //group 채팅방 참여
     @PostMapping("/room/group/{roomId}/join")
     public ResponseEntity<?> joinGroupChatRoom(@PathVariable Long roomId){
-        chatService.addParticipantToGroupChat(roomId);
+        chatService.addParticipantToGroupChat(roomId); // 내가 참여 -> Authentication 객체에서 꺼낼 것
         return ResponseEntity.ok().build();
     }
 }

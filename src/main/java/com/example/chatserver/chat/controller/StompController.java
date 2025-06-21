@@ -1,6 +1,6 @@
 package com.example.chatserver.chat.controller;
 
-import com.example.chatserver.chat.dto.ChatMessageReqDto;
+import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +39,12 @@ public class StompController {
      * sendTo는 직접 전달하는 방식으로구현(추후 Redis 활용을 위해)
      */
     @MessageMapping("/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, ChatMessageReqDto chatMessageReqDto) {
-        log.info(chatMessageReqDto.getSenderEmail() + " : " + chatMessageReqDto.getMessage());
+    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) {
+        log.info(chatMessageDto.getSenderEmail() + " : " + chatMessageDto.getMessage());
 
         // DB에 저장
-        chatService.saveMessage(roomId, chatMessageReqDto);
+        chatService.saveMessage(roomId, chatMessageDto);
 
-        messageTemplate.convertAndSend("/topic/" + roomId, chatMessageReqDto); // = sendTo
+        messageTemplate.convertAndSend("/topic/" + roomId, chatMessageDto); // = sendTo
     }
 }

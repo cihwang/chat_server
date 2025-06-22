@@ -1,15 +1,13 @@
 package com.example.chatserver.chat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ChatMessageReqDto {
+@Builder
+public class ChatMessageDto {
     private String message;
     private String senderEmail;
 }

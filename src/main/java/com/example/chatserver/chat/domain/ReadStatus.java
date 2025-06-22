@@ -34,4 +34,8 @@ public class ReadStatus extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean isRead; // 기본 값이 false
 
+
+    public void updateIsRead(Boolean isRead){
+        this.isRead = isRead;
+    }
 }

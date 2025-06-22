@@ -28,7 +28,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(email); // payload: subject는 해당 claims의 key값 역할해주는 변수
         claims.put("role", role);
         Date now = new Date();
-        String token = Jwts.builder()
+        String token = Jwts. builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiration * 60 * 1000L))

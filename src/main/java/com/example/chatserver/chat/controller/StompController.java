@@ -2,6 +2,9 @@ package com.example.chatserver.chat.controller;
 
 import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.service.ChatService;
+import com.example.chatserver.chat.service.RedisPubSubService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -15,11 +18,13 @@ public class StompController {
 
     private final SimpMessageSendingOperations messageTemplate;
     private final ChatService chatService;
+    private final RedisPubSubService redisPubSubService;
 
     @Autowired
-    public StompController(SimpMessageSendingOperations messageTemplate, ChatService chatService) {
+    public StompController(SimpMessageSendingOperations messageTemplate, ChatService chatService, RedisPubSubService redisPubSubService) {
         this.messageTemplate = messageTemplate;
         this.chatService = chatService;
+        this.redisPubSubService = redisPubSubService;
     }
 
     /**
@@ -37,14 +42,23 @@ public class StompController {
     /**
      * 방법2) MessageMapping 어노테이션만 활용
      * sendTo는 직접 전달하는 방식으로구현(추후 Redis 활용을 위해)
+     *
+     * MessageMapping이 특정 STOMP 토픽에 발행되는 메시지를 받는다. ->
+     *
      */
     @MessageMapping("/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) {
+    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) throws JsonProcessingException {
         log.info(chatMessageDto.getSenderEmail() + " : " + chatMessageDto.getMessage());
 
         // DB에 저장
         chatService.saveMessage(roomId, chatMessageDto);
+        chatMessageDto.setRoomId(roomId);
+//        messageTemplate.convertAndSend("/topic/" + roomId, chatMessageDto); // = sendTo
 
-        messageTemplate.convertAndSend("/topic/" + roomId, chatMessageDto); // = sendTo
+        ObjectMapper objectMapper = new ObjectMapper();
+        String message = objectMapper.writeValueAsString(chatMessageDto);
+
+        // publish 호출
+        redisPubSubService.publish("chat", message);
     }
 }

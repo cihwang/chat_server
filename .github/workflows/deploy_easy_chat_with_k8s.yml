@@ -6,13 +6,17 @@ on:
     branches:
       - main
 
+# 작업들
 jobs:
   build-and-deploy:
+    # 가상 pc 운영체제 설정
     runs-on: ubuntu-latest
     steps:
+      # github source code 가져오기(git clone)
       - name: checkout github
         uses: actions/checkout@v2
 
+      # kubectl 설치
       - name: install kubectl
         uses: azure/setup-kubectl@v3
         with:
@@ -27,7 +31,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: update cluster infomation
-        run: aws eks update-kubeconfig --name  my-cluster --region ap-northeast-2
+         : aws eks update-kubeconfig --name  my-cluster --region ap-northeast-2
 
       - name: Login to ECR
         id: login-ecr
@@ -35,16 +39,14 @@ jobs:
 
       - name: build and push docker image to ecr
         env:
-          REGISTRY: 346903264902.dkr.ecr.ap-northeast-2.amazonaws.com
-          REPOSITORY: order-backend
+          REGISTRY: 058264274560.dkr.ecr.ap-northeast-2.amazonaws.com
+          REPOSITORY: chat-backend
           IMAGE_TAG: latest
         run: |
-          docker build \
-          -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
-          -f ./2.ordersystem/Dockerfile ./2.ordersystem
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: eks kubectl apply
         run: |
-          kubectl rollout restart deployment ordersystem-backend -n bradkim
-        # kubectl apply -f ./2.ordersystem/k8s/k8s-ordersystem/depl_svc.yml
+          kubectl rollout restart deployment easychat-backend -n easy-chat
+        # kubectl apply -f ./k8s/k8s-easychat/depl_svc.yml

@@ -10,6 +10,7 @@ services:
 #    비밀번호, db까지 만들면서 실행
     environment:
       - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=chatdb
     ports:
       - "3306:3306"
 
@@ -34,7 +35,7 @@ services:
 #    같은 네트워크로 묶이기 때문에 컨테이너 이름으로 통신이 가능하다.
 #    rule -> application.yml을 .으로 접근 -> yml 값을 덮어쓰게됨
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mydb:3306/ordersystem?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mydb:3306/chatdb?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
-      - SPRING_REDIS_HOST=myredis
+      - SPRING_DATA_REDIS_HOST=myredis

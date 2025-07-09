@@ -48,7 +48,7 @@ public class SecurityConfigs {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("https://chat-front-6tcw.vercel.app"));
         configuration.setAllowedMethods(Arrays.asList("*")); // 모든 http method 허용
         configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 header값 허용
         configuration.setAllowCredentials(true); // 자격 증명 허용(인증 작업 관련한 자격 증명들 허용)

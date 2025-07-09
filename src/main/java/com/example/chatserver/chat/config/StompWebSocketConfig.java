@@ -25,7 +25,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/connect")
-                .setAllowedOrigins("http://localhost:5173")
+                .setAllowedOrigins("https://chat-front-6tcw.vercel.app")
 //                ws:// 가 아니라 http:// 엔드포인트를 사용할 수 있게 해주는 sockJS 라이브러리를 통한 요청을 허용하는 설정
 //                front에서 sockJS를 사용해서 요청할 것이기 때문
                 .withSockJS();

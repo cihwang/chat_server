@@ -31,7 +31,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: update cluster infomation
-         : aws eks update-kubeconfig --name  my-cluster --region ap-northeast-2
+        run : aws eks update-kubeconfig --name  my-cluster --region ap-northeast-2
 
       - name: Login to ECR
         id: login-ecr

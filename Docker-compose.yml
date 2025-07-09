@@ -1,0 +1,40 @@
+# docker compose의 버전정보
+version: '3.8'
+
+# 컨테이너를 하나씩 명시
+services:
+#  컨테이너명
+  mydb:
+#    사용할 이미지명
+    image: mysql
+#    비밀번호, db까지 만들면서 실행
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    ports:
+      - "3306:3306"
+
+  myredis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  my-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+#   두 컨테이너가 실행되기 전까지 실행하지 않겠다는 설정
+    depends_on:
+      - mydb
+      - myredis
+#    실행되고 db 구성 시간 필요 -> restart 옵션
+    restart: on-failure:10
+#    같은 네트워크로 묶이기 때문에 컨테이너 이름으로 통신이 가능하다.
+#    rule -> application.yml을 .으로 접근 -> yml 값을 덮어쓰게됨
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mydb:3306/ordersystem?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_REDIS_HOST=myredis

@@ -1,0 +1,30 @@
+
+# ingress-controller 설치 명령어
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/aws/deploy.yaml
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: easychat-backend-ingress
+  namespace: easy-chat
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: my-issuer
+spec:
+  tls:
+    - hosts:
+        - "server.ea2y-chat.store"
+      # https설정시에 TLS 인증서가 저장된 certificate의 Secret의 이름(spec.secretName)을 지정
+      secretName: server-ea2y-chat-com-tls
+  rules:
+    - host: server.ea2y-chat.store
+      http:
+        paths:
+          - path: / #모든 url요청을 service로 라우팅
+            pathType: Prefix
+            backend:
+              service:
+                name: easychat-backend-service
+                port:
+                  number: 80
